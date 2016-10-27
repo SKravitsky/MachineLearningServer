@@ -4,8 +4,25 @@
 
 import re
 import urllib2
-import requests
+import json
+import datetime
+import os
 from bs4 import BeautifulSoup
+
+today = datetime.date.today().strftime("%m%d%Y")
+StationJSON = "Station-" + today + ".json"
+LocationJSON = "Location-" + today + ".json"
+FileLocation = "./"
+
+def CheckJSON(jsonfile):
+    if os.path.isfile(FileLocation + jsonfile):
+        return True
+    else:
+        print "The file does not exist"
+        print "Creating file %s" % (jsonfile)
+        f = file(jsonfile, "w+")
+        f.close()
+        return False
 
 def ParseLinks(url, website):
     try:
@@ -63,7 +80,6 @@ def SoupStations(soup):
     notlatlng = longlist[1]
     latlnglist = notlatlng[1:-2]
     LatLong = latlnglist.split(',')
-
     return LatLong
 
         
@@ -71,7 +87,16 @@ def SoupStations(soup):
 if __name__ == "__main__":
     url = 'http://www.septa.org/maps/transit/mfl.html'
     front = 'http://www.septa.org'
-    StationDict = ParseLinks(url,front)
-    LocationDict = ParseLocation(StationDict)
-    print LocationDict
-##    print StationDict        
+
+    StationCheck = CheckJSON(StationJSON)
+    LocationCheck = CheckJSON(LocationJSON)
+    
+    if StationCheck:
+        print "True"
+    else:
+        StationDict = ParseLinks(url,front)
+    
+    if LocationCheck:
+        print "True"
+    else:
+        LocationDict = ParseLocation(StationDict) 
