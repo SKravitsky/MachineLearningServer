@@ -92,11 +92,14 @@ if __name__ == "__main__":
     LocationCheck = CheckJSON(LocationJSON)
     
     if StationCheck:
-        print "True"
+        with open(StationJSON, 'r') as readfile:
+            StationDict = json.load(readfile)
     else:
         StationDict = ParseLinks(url,front)
+        with open(StationJSON, 'w') as outfile:
+            json.dump(StationDict, outfile)
     
-    if LocationCheck:
-        print "True"
-    else:
-        LocationDict = ParseLocation(StationDict) 
+#    if LocationCheck:
+#        print "True"
+#    else:
+#        LocationDict = ParseLocation(StationDict) 
