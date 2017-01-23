@@ -4,7 +4,7 @@ import string
 from urllib2 import Request, urlopen, URLError
 from pprint import pprint
 
-def cleanhtml(raw_html):
+def clean_html(raw_html):
 	cleanr = re.compile('<.*?>')
 	cleantext = re.sub(cleanr, '', raw_html)
 	return cleantext
@@ -18,13 +18,17 @@ def request_status(request):
 
 	return test
 
-if __name__ == "__main__":
+def main():
 	request = Request('http://www3.septa.org/hackathon/Alerts/get_alert_data.php?req1=rr_route_mfl')
-	output = request_status(request)
+	#request = Request('http://www3.septa.org/hackathon/Alerts/get_alert_data.php?req1=rr_route_bsl')
+    output = request_status(request)
 	
 	out = json.loads(output)
 	node = out[0]['advisory_message']
 
-	x = cleanhtml(node)
+	x = clean_html(node)
 	y = re.sub(r"\t+", "", x)
-	print y
+	print y	
+
+if __name__ == "__main__":
+	main()
