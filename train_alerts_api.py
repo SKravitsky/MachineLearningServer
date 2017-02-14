@@ -32,13 +32,14 @@ def station_picker(station):
         print 'Please enter a valid station, either mfl or bsl'
     output = request_status(request)
     return output
-    
-def main():
-    for station in ['mfl', 'bsl']:
-        request_output = station_picker(station)
-        json_output = json_formatting(request_output)
-        cleaned_output = clean_html(json_output)
-        print cleaned_output
 
-if __name__ == "__main__":
-	main()
+def start_function(station):
+    request_output = station_picker(station)
+    json_output = json_formatting(request_output)
+    cleaned_output = clean_html(json_output)
+    print cleaned_output
+
+def lambda_handler(event, context):
+    print event
+    start_function(event) 
+        
