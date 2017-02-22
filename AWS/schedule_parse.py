@@ -55,7 +55,7 @@ def csv_Writing(output):
 def get_Time_Station(soup):
     for key, value in dict.iteritems():
         value2 = value.decode('utf-8')
-        dict_list['%s_list' % value2] = []
+        dict_list['%s' % value2] = []
     
     for key, value in dict.iteritems():
         time = soup.find('td', title=value)
@@ -63,7 +63,7 @@ def get_Time_Station(soup):
             #print(tags.string)
             temp = tags.string.replace(u'\xa0','')
             temp2 = temp.replace(u'\u2014', '-')
-            dict_list['%s_list' % value].append(temp2)
+            dict_list['%s' % value].append(temp2)
     
     with open('test.csv', 'wb') as outfile:
         writer = csv.writer(outfile)
