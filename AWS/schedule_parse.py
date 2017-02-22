@@ -16,12 +16,12 @@ def schedule_Picker(line):
         'mfl_f_w' : "http://www.septa.org/schedules/transit/w/MFL_0.htm",
         'mfl_f_sat' : "http://www.septa.org/schedules/transit/s/MFL_0.htm",
         'mfl_f_sun' : "http://www.septa.org/schedules/transit/h/MFL_0.htm",
-	'bsl_fern_w' : "http://www.septa.org/schedules/transit/w/BSL_1.htm"
-	'bsl_fern_sat' : "http://www.septa.org/schedules/transit/s/BSL_1.htm"
-	'bsl_fern_sun' : "http://www.septa.org/schedules/transit/h/BSL_1.htm"
-	'bsl_att_w' : "http://www.septa.org/schedules/transit/w/BSL_0.htm"
-	'bsl_att_sat' : "http://www.septa.org/schedules/transit/s/BSL_0.htm"
-	'bsl_att_sun' : "http://www.septa.org/schedules/transit/h/BSL_0.htm"
+	'bsl_fern_w' : "http://www.septa.org/schedules/transit/w/BSL_1.htm",
+	'bsl_fern_sat' : "http://www.septa.org/schedules/transit/s/BSL_1.htm",
+	'bsl_fern_sun' : "http://www.septa.org/schedules/transit/h/BSL_1.htm",
+	'bsl_att_w' : "http://www.septa.org/schedules/transit/w/BSL_0.htm",
+	'bsl_att_sat' : "http://www.septa.org/schedules/transit/s/BSL_0.htm",
+	'bsl_att_sun' : "http://www.septa.org/schedules/transit/h/BSL_0.htm",
         }.get(line,'error')
 
 
@@ -46,14 +46,17 @@ def get_Times(soup):
 
 ## Create a separate list to try to get the ordering correct
 def get_ID_Station(soup):
+    temp = []
     table = soup.find('table', id="timeTable")
     
     for rows in table.findAll('th'):
         name = rows.text
         data = name.split("StopID:")
+        temp.append(data[0])
         dict[data[1]] = data[0]
 
-
+    list_half = temp[:len(temp)/2]
+    return list_half
 
 ## Save the csv files with a time stamp
 ## have a separate script to upload the data
@@ -62,7 +65,8 @@ def csv_Writing(output):
         spamwriter = csv.writer(csvfile, delimiter = '|')
 
 
-def get_Time_Station(soup):
+def get_Time_Station(soup, list_half):
+    print(list_half)
     for key, value in dict.iteritems():
         value2 = value.decode('utf-8')
         dict_list['%s' % value2] = []
@@ -86,8 +90,8 @@ def main():
     website = schedule_Picker('mfl_f_w')
     main_source = source(website)
     soup = soupify(main_source)
-    get_ID_Station(soup)
-    get_Time_Station(soup)
+    list_half = get_ID_Station(soup)
+    get_Time_Station(soup, list_half)
 
 def lambda_handler(event, context):
     print event
