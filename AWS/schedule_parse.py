@@ -16,6 +16,12 @@ def schedule_Picker(line):
         'mfl_f_w' : "http://www.septa.org/schedules/transit/w/MFL_0.htm",
         'mfl_f_sat' : "http://www.septa.org/schedules/transit/s/MFL_0.htm",
         'mfl_f_sun' : "http://www.septa.org/schedules/transit/h/MFL_0.htm",
+	'bsl_fern_w' : "http://www.septa.org/schedules/transit/w/BSL_1.htm"
+	'bsl_fern_sat' : "http://www.septa.org/schedules/transit/s/BSL_1.htm"
+	'bsl_fern_sun' : "http://www.septa.org/schedules/transit/h/BSL_1.htm"
+	'bsl_att_w' : "http://www.septa.org/schedules/transit/w/BSL_0.htm"
+	'bsl_att_sat' : "http://www.septa.org/schedules/transit/s/BSL_0.htm"
+	'bsl_att_sun' : "http://www.septa.org/schedules/transit/h/BSL_0.htm"
         }.get(line,'error')
 
 
@@ -38,6 +44,7 @@ def get_Times(soup):
         print(tags.string)
 
 
+## Create a separate list to try to get the ordering correct
 def get_ID_Station(soup):
     table = soup.find('table', id="timeTable")
     
@@ -47,6 +54,9 @@ def get_ID_Station(soup):
         dict[data[1]] = data[0]
 
 
+
+## Save the csv files with a time stamp
+## have a separate script to upload the data
 def csv_Writing(output):
     with open('test.csv', 'wb') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter = '|')
