@@ -25,10 +25,6 @@ lines = {
     'bsl_att_sun' : "http://www.septa.org/schedules/transit/h/BSL_0.htm",
     }
 
-lines_temp = {
-    'mfl_69_w' : "http://www.septa.org/schedules/transit/w/MFL_1.htm"
-    }
-
 '''
 def schedule_Picker(line):
     return{
@@ -93,9 +89,12 @@ def get_ID_Station(soup):
 
 ## Save the csv files with a time stamp
 ## have a separate script to upload the data
-def csv_Writing(output):
-    with open('test.csv', 'wb') as csvfile:
-        spamwriter = csv.writer(csvfile, delimiter = '|')
+def csv_Writing(key_name, file_ending, new_dict):
+    csv_file_name = key_name + file_ending
+    with open(csv_file_name, 'wb') as outfile:
+        writer = csv.writer(outfile)
+        writer.writerow(new_dict.keys())
+        writer.writerows(zip(*new_dict.values()))
 
 
 def dict_Sort(old_dict, list_half):
@@ -120,18 +119,7 @@ def get_Time_Station(soup, list_half, file_ending, key_name):
             dict_list['%s' % value].append(temp2)
 
     new_dict = dict_Sort(dict_list, list_half)
-    '''
-    csv_file_name = key_name + file_ending
-    with open(csv_file_name, 'wb') as outfile:
-        writer = csv.writer(outfile)
-        writer.writerow(dict_list.keys())
-        writer.writerows(zip(*dict_list.values()))
-    '''
-    csv_file_name = key_name + file_ending
-    with open(csv_file_name, 'wb') as outfile:
-        writer = csv.writer(outfile)
-        writer.writerow(new_dict.keys())
-        writer.writerows(zip(*new_dict.values()))
+    csv_Writing(key_name, file_ending, new_dict)
     
         
 def main():
@@ -139,7 +127,7 @@ def main():
     file_ending = "_" + current_time + ".csv"
 
 
-    for key, value in lines_temp.iteritems():
+    for key, value in lines.iteritems():
         if csv_Check(key, file_ending):
             print(key + file_ending + " already exists")
         else:
@@ -147,6 +135,8 @@ def main():
             soup = soupify(main_source)
             list_half = get_ID_Station(soup)
             get_Time_Station(soup, list_half, file_ending, key)
+            print("Finished " + key + "_" + file_ending)
+            dict_list.clear()
             dict.clear()
 
 
