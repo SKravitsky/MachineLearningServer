@@ -26,6 +26,7 @@ lines = {
     }
 
 '''
+#If we want to use an API
 def schedule_Picker(line):
     return{
         'mfl_69_w' : "http://www.septa.org/schedules/transit/w/MFL_1.htm",
@@ -70,7 +71,6 @@ def get_Times(soup):
         print(tags.string)
 
 
-## Create a separate list to try to get the ordering correct
 def get_ID_Station(soup):
     temp = []
     table = soup.find('table', id="timeTable")
@@ -87,8 +87,6 @@ def get_ID_Station(soup):
     return list_half
 
 
-## Save the csv files with a time stamp
-## have a separate script to upload the data
 def csv_Writing(key_name, file_ending, new_dict):
     csv_file_name = key_name + file_ending
     with open(csv_file_name, 'wb') as outfile:
