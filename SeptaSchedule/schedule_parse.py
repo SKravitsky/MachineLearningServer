@@ -80,7 +80,7 @@ def get_ID_Station(soup):
         data = name.split("StopID:")
         if data[0] == 'AT&T;':
             data[0] = 'AT&T'
-        temp.append(data[0])
+        temp.append('%s | %s' % (data[0], data[1]))
         dict[data[1]] = data[0]
 
     list_half = temp[:len(temp)/2]
@@ -88,10 +88,20 @@ def get_ID_Station(soup):
 
 
 def csv_Writing(key_name, file_ending, new_dict):
+    station = []
+    stop = []
+    
+    for value in new_dict.keys():
+        temp_list = value.split('|')
+        station.append(temp_list[0])
+        stop.append(temp_list[1])
+
     csv_file_name = key_name + file_ending
     with open(csv_file_name, 'wb') as outfile:
         writer = csv.writer(outfile)
-        writer.writerow(new_dict.keys())
+        #writer.writerow(new_dict.keys())
+        writer.writerow(station)
+        writer.writerow(stop)
         writer.writerows(zip(*new_dict.values()))
 
 
@@ -106,7 +116,8 @@ def dict_Sort(old_dict, list_half):
 def get_Time_Station(soup, list_half, file_ending, key_name):
     for key, value in dict.iteritems():
         value2 = value.decode('utf-8')
-        dict_list['%s' % value2] = []
+        key2 = key.decode('utf-8')
+        dict_list['%s | %s' % (value2, key2)] = []
     
     for key, value in dict.iteritems():
         time = soup.find('td', title=value)        
@@ -114,7 +125,7 @@ def get_Time_Station(soup, list_half, file_ending, key_name):
             #print(tags.string)
             temp = tags.string.replace(u'\xa0','')
             temp2 = temp.replace(u'\u2014', '-')
-            dict_list['%s' % value].append(temp2)
+            dict_list['%s | %s' % (value, key)].append(temp2)
 
     new_dict = dict_Sort(dict_list, list_half)
     csv_Writing(key_name, file_ending, new_dict)
