@@ -1,0 +1,11 @@
+feautre_payload = time, day, latitude, longitude, UserID
+features = time, day, lat, long
+target = Ending station
+
+Persistent decision tree
+Write the code two ways, one with a numpy array and one with just accepting an API line (JSON)
+Save tree with pickle using the UserID
+
+See how long it takes for making bigger trees (1,000 rows vs. 1,000,000 rows)
+See how long it takes to pull SQL data then build the tree 
+Weight older trips less?
