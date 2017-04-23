@@ -9,6 +9,9 @@ w_array = np.full_like(m_array, 3, dtype=np.int)
 r_array = np.full_like(m_array, 4, dtype=np.int)
 f_array = np.full_like(m_array, 5, dtype=np.int)
 
+thirty_array = np.full_like(m_array, 77, dtype=np.int)
+fifteen_array = np.full_like(m_array, 176, dtype=np.int)
+spring_array = np.full_like(m_array, 206, dtype=np.int)
 
 mwf_morning = [800, 815,830,845,900,915,930,945,1000]
 tr_morning = [1200, 1215,1230,1245,1300,1315,1330,1345,1400]
@@ -29,10 +32,74 @@ fri_night = np.random.choice(f_night, Weeks, p=[0.05,0.05,0.1,0.1,0.4,0.1,0.1,0.
 tue_night = np.random.choice(tr_night, Weeks, p=[0.05,0.05,0.1,0.1,0.4,0.1,0.1,0.05,0.05])
 thu_night = np.random.choice(tr_night, Weeks, p=[0.05,0.05,0.1,0.1,0.4,0.1,0.1,0.05,0.05])
 
-mm_temp = np.array((week_array, m_array, mon_morning)).T
-mn_temp = np.array((week_array, m_array, mon_night)).T
 
-print mm_temp
+mm_feature = np.array((week_array, m_array, mon_morning, thirty_array)).T
+mm_target = np.vstack(fifteen_array)
 
-mon_final = np.vstack((mm_temp, mn_temp))
-print mon_final
+mn_feature = np.array((week_array, m_array, mon_night, fifteen_array)).T
+mn_target = np.vstack(thirty_array)
+
+mon_feature_final = np.vstack((mm_feature, mn_feature))
+mon_target_final = np.vstack((mm_target, mn_target))
+
+
+tm_feature = np.array((week_array, t_array, tue_morning, thirty_array)).T
+tm_target = np.vstack(spring_array)
+
+tn_feature = np.array((week_array, t_array, tue_night, spring_array)).T
+tn_target = np.vstack(thirty_array)
+
+tue_feature_final = np.vstack((tm_feature, tn_feature))
+tue_target_final = np.vstack((tm_target, tn_target))
+
+
+wm_feature = np.array((week_array, w_array, wed_morning, thirty_array)).T
+wm_target = np.vstack(fifteen_array)
+
+wn_feature = np.array((week_array, w_array, wed_night, fifteen_array)).T
+wn_target = np.vstack(thirty_array)
+
+wed_feature_final = np.vstack((wm_feature, wn_feature))
+wed_target_final = np.vstack((wm_target, wn_target))
+
+
+rm_feature = np.array((week_array, r_array, thu_morning, thirty_array)).T
+rm_target = np.vstack(spring_array)
+
+rn_feature = np.array((week_array, r_array, thu_night, spring_array)).T
+rn_target = np.vstack(thirty_array)
+
+thu_feature_final = np.vstack((rm_feature, rn_feature))
+thu_target_final = np.vstack((rm_target, rn_target))
+
+
+fm_feature = np.array((week_array, f_array, fri_morning, thirty_array)).T
+fm_target = np.vstack(fifteen_array)
+
+fn_feature = np.array((week_array, f_array, fri_night, fifteen_array)).T
+fn_target = np.vstack(thirty_array)
+
+fri_feature_final = np.vstack((fm_feature, fn_feature))
+fri_target_final = np.vstack((fm_target, fn_target))
+
+
+mt_feature = np.vstack((mon_feature_final, tue_feature_final))
+mt_target = np.vstack((mon_target_final, tue_target_final))
+
+tw_feature = np.vstack((mt_feature, wed_feature_final))
+tw_target = np.vstack((mt_target, wed_target_final))
+
+wr_feature = np.vstack((tw_feature, thu_feature_final))
+wr_target = np.vstack((tw_target, thu_target_final))
+
+final_feature = np.vstack((wr_feature, fri_feature_final))
+final_target = np.vstack((wr_target, fri_target_final))
+
+
+#print mm_target
+#print mm_feature
+#print mon_target_final
+
+np.savetxt("feature.csv", final_feature, delimiter=",", fmt='%i')
+np.savetxt("target.csv", final_target, delimiter=",", fmt='%i')
+
