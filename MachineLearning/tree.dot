@@ -1,13 +1,13 @@
 digraph Tree {
 node [shape=box, style="filled, rounded", color="black", fontname=helvetica] ;
 edge [fontname=helvetica] ;
-0 [label="Station <= 126.5\ngini = 0.62\nsamples = 1040\nvalue = [520, 312, 208]\nclass = P", fillcolor="#e5813949"] ;
-1 [label="Time <= 1100.0\ngini = 0.48\nsamples = 520\nvalue = [0, 312, 208]\nclass = r", fillcolor="#39e58155"] ;
+0 [label="Nearest <= 126.5\ngini = 0.62\nsamples = 1040\nvalue = [520, 312, 208]", fillcolor="#e5813949"] ;
+1 [label="Time <= 1100.0\ngini = 0.48\nsamples = 520\nvalue = [0, 312, 208]", fillcolor="#39e58155"] ;
 0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
-2 [label="gini = 0.0\nsamples = 312\nvalue = [0, 312, 0]\nclass = r", fillcolor="#39e581ff"] ;
+2 [label="gini = 0.0\nsamples = 312\nvalue = [0, 312, 0]", fillcolor="#39e581ff"] ;
 1 -> 2 ;
-3 [label="gini = 0.0\nsamples = 208\nvalue = [0, 0, 208]\nclass = e", fillcolor="#8139e5ff"] ;
+3 [label="gini = 0.0\nsamples = 208\nvalue = [0, 0, 208]", fillcolor="#8139e5ff"] ;
 1 -> 3 ;
-4 [label="gini = 0.0\nsamples = 520\nvalue = [520, 0, 0]\nclass = P", fillcolor="#e58139ff"] ;
+4 [label="gini = 0.0\nsamples = 520\nvalue = [520, 0, 0]", fillcolor="#e58139ff"] ;
 0 -> 4 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
 }
