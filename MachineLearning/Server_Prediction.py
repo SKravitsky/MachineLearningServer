@@ -1,18 +1,51 @@
 import numpy as np
 import pandas as pd
 import os
+import sys
+import pydot
+import mysql.connector
 from sklearn import tree
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.externals.six import StringIO
-import pydot
+
+
+config = {
+  'user': 'ECE32',
+  'password': 'seniordesign',
+  'host': 'septa-instance.ctejk6luw06s.us-west-2.rds.amazonaws.com',
+  'database': 'septa',
+  'raise_on_warnings': True,
+}
+
+
+def get_alllines():
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor(dictionary=True)
+
+    df_mysql = pd.read_sql('select * from VIEWS;', con=cnx)
+
+    '''
+    cursor.execute("SELECT * FROM septa.lines")
+
+    lines = {}
+    for row in cursor:
+        line_id = row['id']
+        lines[row['name']] = line_id
+
+    cursor.close()
+    cnx.close()
+
+    return lines
+    '''
+
 
 def get_csv():
     if os.path.exists("Update.csv"):
         df = pd.read_csv("Update.csv")
     return df
 
-def scrub_csv(data):
+def scrub_df(data):
     #print("* df.head()", data.head())
     
     features = list(df.columns[:3])
@@ -42,5 +75,5 @@ def prediction(F, T, N):
 
 if __name__ == "__main__":
     df = get_csv()
-    features, targets, names = scrub_csv(df)
+    features, targets, names = scrub_df(df)
     prediction(features, targets, names)
