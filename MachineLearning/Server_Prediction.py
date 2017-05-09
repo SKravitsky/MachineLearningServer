@@ -19,61 +19,77 @@ config = {
 }
 
 
-def get_alllines():
+def get_all_lines(user_id):
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor(dictionary=True)
 
-    df_mysql = pd.read_sql('select * from VIEWS;', con=cnx)
+    sql4 = 'SELECT id_weekday, time_departure, id_station_origin, id_station_destination FROM trips WHERE id_user = "%s"' % user_id
+    sql = 'SELECT id_weekday, time_departure, id_station_origin, id_station_destination FROM trips'
 
-    '''
-    cursor.execute("SELECT * FROM septa.lines")
 
-    lines = {}
-    for row in cursor:
-        line_id = row['id']
-        lines[row['name']] = line_id
+    df_mysql = pd.read_sql(sql, con=cnx)
 
-    cursor.close()
-    cnx.close()
+    print df_mysql.dtypes
 
-    return lines
-    '''
+    df_mysql.time_departure = df_mysql.time_departure.astype(int)
 
+    print df_mysql.dtypes
+
+    #print df_mysql.head()
+    return df_mysql
+    
 
 def get_csv():
     if os.path.exists("Update.csv"):
         df = pd.read_csv("Update.csv")
     return df
 
+
 def scrub_df(data):
     #print("* df.head()", data.head())
     
-    features = list(df.columns[:3])
+    features = list(data.columns[:3])
+    targets = list(data.columns[3:])
     
     #print("* features:", features)
+    #print("* targets:", targets)
 
-    X = df[features]
-    Y = df["Prediction"]
+
+    X = data[features]
+    Y = data[targets]
 
     #print("Head", X.tail())
     #print("Head2", Y.tail())
     
-    return X,Y,features
+    return X,Y,features,targets
 
-def prediction(F, T, N):
+
+def prediction(F, T, FN, TN):
     clf = tree.DecisionTreeClassifier()
 
-    F_train, F_test, T_train, T_test = train_test_split(F, T, test_size = .2)
+    #F_train, F_test, T_train, T_test = train_test_split(F, T, test_size = .2)
 
-    clf.fit(F_train, T_train)
-    predictions = clf.predict(F_test)
+    clf.fit(F, T)
+    #predictions = clf.predict(F_test)
     
-    print accuracy_score(T_test, predictions)
+    #print accuracy_score(T_test, predictions)
 
-    #tree.export_graphviz(clf, out_file='tree.dot', feature_names=N, filled=True, rounded=True)
+    #tree.export_graphviz(clf, out_file='tree.dot', feature_names=FN, filled=True, rounded=True)
     #os.system('dot -Tpng tree.dot -o tree.png')
 
+
 if __name__ == "__main__":
-    df = get_csv()
-    features, targets, names = scrub_df(df)
-    prediction(features, targets, names)
+    user_id = 'e2f4uovEeYU'
+
+    df = get_all_lines(user_id)
+    features, targets, fnames, tnames = scrub_df(df)
+    print features
+    
+    '''
+    df2 = get_csv()
+    features2, targets2, fnames2, tnames2 = scrub_df(df2)
+    print '----'
+    print features2
+    '''
+
+    #prediction(features, targets, fnames, tnames)
