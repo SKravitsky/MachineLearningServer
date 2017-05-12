@@ -8,8 +8,8 @@ from sklearn.externals.six import StringIO
 import pydot
 
 def get_csv():
-    if os.path.exists("Update.csv"):
-        df = pd.read_csv("Update.csv")
+    if os.path.exists("Update2.csv"):
+        df = pd.read_csv("Update2.csv")
     return df
 
 def scrub_csv(data):
@@ -36,9 +36,16 @@ def prediction(F, T, N):
     predictions = clf.predict(F_test)
     
     print accuracy_score(T_test, predictions)
+    
+    class_names_tree = clf.classes_
+    temp = class_names_tree.tolist()
 
-    #tree.export_graphviz(clf, out_file='tree.dot', feature_names=N, filled=True, rounded=True)
-    #os.system('dot -Tpng tree.dot -o tree.png')
+    for x,y in enumerate(temp):
+        temp[x] = str(y)
+        print type(temp[x])
+
+    tree.export_graphviz(clf, out_file='tree.dot', feature_names=N, class_names=temp, filled=True, rounded=True)
+    os.system('dot -Tpng tree.dot -o tree.png')
 
 if __name__ == "__main__":
     df = get_csv()
