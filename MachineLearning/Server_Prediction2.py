@@ -128,4 +128,4 @@ if __name__ == "__main__":
     print features2
     '''
 
-    prediction(features, targets, fnames, tnames)
+    prediction_accuracy(features, targets, fnames, tnames)
